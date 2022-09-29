@@ -7,19 +7,20 @@ import { Actors, MovieInformation, Movies, Navbar, Profile } from './';
 const App = () => (
   <div>
     <CssBaseline />
+    <Navbar />
     <main>
       <Switch>
         <Route exact path="/">
-          <h1>Movies</h1>
+          <Movies />
         </Route>
         <Route path="/movie/:id">
-          <h1>Movie Information</h1>
+          <MovieInformation />
         </Route>
         <Route path="/actors/:id">
-          <h1>Actors</h1>
+          <Actors />
         </Route>
         <Route path="/profile/:id">
-          <h1>Profile</h1>
+          <Profile />
         </Route>
       </Switch>
     </main>
