@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   AppBar,
   IconButton,
@@ -17,9 +17,12 @@ import {
 import { useTheme } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 
+import { Sidebar } from '..';
+
 import useStyles from './styles';
 
 const Navbar = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
   const classes = useStyles();
   const isMobile = useMediaQuery('(max-width:600px)');
   const theme = useTheme();
@@ -29,28 +32,28 @@ const Navbar = () => {
     <>
       <AppBar position="fixed">
         <Toolbar className={classes.toolbar}>
-          {/* mobile menu  */}
+          {/* Mobile menu  */}
           {isMobile && (
             <IconButton
               color="inherit"
               edge="start"
               style={{ outline: 'none' }}
-              onClick={() => {}}
+              onClick={() => setMobileOpen((prevMobileOpen) => !prevMobileOpen)}
               className={classes.menuButton}
             >
               <Menu />
             </IconButton>
           )}
 
-          {/* light or dark mode  */}
+          {/* Color mode toggle  */}
           <IconButton color="inherit" sx={{ ml: 1 }} onClick={() => {}}>
             {theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
           </IconButton>
 
-          {/* search if not mobile  */}
+          {/* Search (full screen)  */}
           {!isMobile && 'Search...'}
 
-          {/* login or profile display  */}
+          {/* Login/Profile display  */}
           <div>
             {!isAuthenticated ? (
               <Button color="inherit" onClick={() => {}}>
@@ -74,10 +77,35 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* search for mobile  */}
+          {/* Search (mobile)  */}
           {isMobile && 'Search...'}
         </Toolbar>
       </AppBar>
+
+      {/* Sidebar drawer  */}
+      <div>
+        <nav className={classes.drawer}>
+          {isMobile ? (
+            <Drawer
+              variant="temporary"
+              anchor="right"
+              open={mobileOpen}
+              onClose={() => setMobileOpen((prevMobileOpen) => !prevMobileOpen)}
+              classes={{ paper: classes.drawerPaper }}
+              ModalProps={{ keepMounted: true }}
+            >
+              <Sidebar setMobileOpen={setMobileOpen} />
+            </Drawer>
+          ) : (
+            <Drawer
+              variant="permanent"
+              classes={{ paper: classes.drawerPaper }}
+            >
+              <Sidebar setMobileOpen={setMobileOpen} />
+            </Drawer>
+          )}
+        </nav>
+      </div>
     </>
   );
 };
